@@ -2,9 +2,11 @@
 pragma solidity ^0.8.7;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 
 contract FoodieBooking {
     ERC20 public token;
+    ERC721 public nft;
 
     struct Chef {
         bytes32 id;
@@ -20,11 +22,15 @@ contract FoodieBooking {
 
     mapping(address => bytes32) public bookings;
 
-    constructor(address _token) {
+    constructor(address _token, address _nft) {
         token = ERC20(_token);
+        nft = ERC721(_nft);
     }
 
     function bookChef(bytes32 _chefId) public {
+        if (nft.balanceOf(msg.sender) == 0) {
+            revert("You do not own NFT");
+        }
         Chef memory chef = chefs[_chefId];
         if (token.balanceOf(msg.sender) < chef.fee) {
             revert("Insufficient Token");
