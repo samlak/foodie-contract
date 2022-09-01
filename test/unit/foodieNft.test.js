@@ -36,8 +36,8 @@ const { developmentChains } = require("../../helper-hardhat-config");
               });
               it("should transfer token after minting", async function () {
                   const initialDeployerBalance = await foodieToken.balanceOf(deployer.address);
-                  foodieNft = await ethers.getContract("FoodieNft", minter);
-                  const txResponse = await foodieNft.mintNFT(nftUri);
+                  const foodieNftMinter = await ethers.getContract("FoodieNft", minter);
+                  const txResponse = await foodieNftMinter.mintNFT(nftUri);
                   await txResponse.wait(1);
                   const minterBalance = await foodieToken.balanceOf(minter.address);
                   const finalDeployerBalance = await foodieToken.balanceOf(deployer.address);

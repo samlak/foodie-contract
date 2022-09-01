@@ -5,8 +5,6 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-import "hardhat/console.sol";
-
 contract FoodieNft is ERC721URIStorage, Ownable {
     ERC20 public token;
     address internal immutable tokenOwner;

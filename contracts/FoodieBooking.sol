@@ -35,7 +35,7 @@ contract FoodieBooking {
         if (token.balanceOf(msg.sender) < chef.fee) {
             revert("Insufficient Token");
         }
-        token.transfer(chef.wallet, chef.fee);
+        token.transferFrom(msg.sender, chef.wallet, chef.fee);
         bookings[msg.sender] = _chefId;
         emit ChefBooked(msg.sender, _chefId);
     }
@@ -48,19 +48,23 @@ contract FoodieBooking {
         chefCounter = chefCounter + 1;
         bytes32 chefId = keccak256(abi.encodePacked(chefCounter, _name));
         chefs[chefId] = Chef(chefId, _name, _wallet, _fee);
+        chefsList.push(chefId);
     }
 
-    function getChef(bytes32 _chefId)
-        public
-        view
-        returns (
-            bytes32,
-            string memory,
-            address,
-            uint256
-        )
-    {
+    function getChef(bytes32 _chefId) public view returns (Chef memory) {
         Chef memory chef = chefs[_chefId];
-        return (chef.id, chef.name, chef.wallet, chef.fee);
+        return chef;
+    }
+
+    function getChefList(uint256 _index) public view returns (bytes32) {
+        return chefsList[_index];
+    }
+
+    function getChefListLength() public view returns (uint256) {
+        return chefsList.length;
+    }
+
+    function getBookings(address _address) public view returns (bytes32) {
+        return bookings[_address];
     }
 }
